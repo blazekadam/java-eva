@@ -5,13 +5,14 @@ import evolution.individuals.Individual;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 
 /**
  * A container which contains the individuals of a population.
  *
  * @author Martin Pilat
  */
-public class Population implements Cloneable {
+public class Population implements Cloneable,Iterable<Individual>{
 
     int size = 0;
     Individual sampleIndividual;
@@ -159,6 +160,24 @@ public class Population implements Cloneable {
 
         return sorted;
 
+    }
+
+    @Override
+    public Iterator<Individual> iterator() {
+        return new Iterator<Individual>(){
+            int pos = 0;
+            
+            @Override
+            public boolean hasNext() {
+                return pos < getPopulationSize();
+            }
+
+            @Override
+            public Individual next() {
+                return get(pos++);
+            }
+            
+        };
     }
 
     class FitnessFunctionComparator implements Comparator<Individual> {

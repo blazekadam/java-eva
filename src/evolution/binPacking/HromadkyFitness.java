@@ -10,12 +10,15 @@ import java.util.Vector;
 
 public class HromadkyFitness implements FitnessFunction {
 
-    final List<Double> weights;
+    final double[] weights;
     final int K;
     final double goal;
 
     public HromadkyFitness(Vector<Double> weights, int K) {
-        this.weights = new ArrayList<>(weights);
+        this.weights = new double[weights.size()];
+        for(int i = 0;i<weights.size();i++){
+            this.weights[i] = weights.get(i);
+        }
         this.K = K;
         goal = weights.stream().reduce(0.0, (o,n)->o+n)/K;
     }
@@ -28,7 +31,7 @@ public class HromadkyFitness implements FitnessFunction {
 
         for (int i = 0; i < bins.length; i++) {
 
-            binWeights[bins[i]] += weights.get(i);
+            binWeights[bins[i]] += weights[i];
         }
 
         return binWeights;

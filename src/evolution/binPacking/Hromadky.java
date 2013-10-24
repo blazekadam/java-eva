@@ -9,6 +9,7 @@ import evolution.individuals.IntegerIndividual;
 import evolution.operators.IntegerMutation;
 import evolution.operators.OnePtXOver;
 import evolution.operators.SwappingMutationOperator;
+import evolution.selectors.BigTournamentSelector;
 import evolution.selectors.RouletteWheelSelector;
 import evolution.selectors.SUSSelector;
 import evolution.selectors.TournamentSelector;
@@ -134,28 +135,32 @@ public class Hromadky {
             HromadkyFitness fitness = new HromadkyFitness(weights, K);
             ea.setFitnessEvaluator(new InverseFitnessEvaluator(fitness));
             ea.addMatingSelector(new SUSSelector());
-            ea.addMatingSelector(new TournamentSelector());
+            //ea.addMatingSelector(new TournamentSelector());
+            ea.addMatingSelector(new BigTournamentSelector());
             ea.addOperator(new OnePtXOver(xoverProb));
             ea.addOperator(new IntegerMutation(mutProb, mutProbPerBit));
-            ea.addOperator(new SwappingMutationOperator(0.1, 0.01));
+            //ea.addOperator(new SwappingMutationOperator(0.1, 0.01));
             ea.addEnvironmentalSelector(new SUSSelector());
-            ea.addEnvironmentalSelector(new TournamentSelector());
-            
+            //ea.addEnvironmentalSelector(new TournamentSelector());
+            ea.addEnvironmentalSelector(new BigTournamentSelector());  
+             
             ea.setElite(eliteSize);
             
             OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(fitnessFilePrefix + "." + number));
             OutputStreamWriter progOut = new OutputStreamWriter(new FileOutputStream(objectiveFilePrefix + "." + number));
 
-            for (int i = 0; i < maxGen; i++) {
+            int lastObj = Integer.MAX_VALUE;
+            for (int i = 1; i <= maxGen; i++) {
                 ea.evolve(pop);
                 IntegerIndividual bestInd = (IntegerIndividual) pop.getSortedIndividuals().get(0);
                 double diff = bestInd.getObjectiveValue();
-                if(i == maxGen -1){
-                    System.out.println(number + ": " + diff + " " + Arrays.toString(fitness.getBinWeights(bestInd)));
+                if(i == maxGen -1 || i % 1000 == 0 || diff != lastObj){
+                    lastObj = (int)diff;
+                    System.out.println(number + "|" + i + ": " + diff + " " + Arrays.toString(fitness.getBinWeights(bestInd)));
                     best[number] = diff;
                 }
-                StatsLogger.logFitness(pop, out);
-                StatsLogger.logObjective(pop, progOut);
+                //StatsLogger.logFitness(pop, out);
+                //StatsLogger.logObjective(pop, progOut);
 
             }
 
