@@ -55,25 +55,27 @@ public class HromadkyFitness implements FitnessFunction {
         }
 
         ind.setObjectiveValue(max - min);    // tohle doporucuji zachovat
-
-        double fitness = (max - min);
-        
+        double fitness;
+        //AVERAGE DISTANCE FROM GOAL
+        /*
         double cumulativeDistanceFromGoal = 0;
         for(int i = 0; i<K;i++){
             cumulativeDistanceFromGoal += Math.abs(binWeights[i] - goal);
         }
         double avgDist = cumulativeDistanceFromGoal / (0.5*K*(K-1));
-        //AVERAGE DISTANCE FROM GOAL
-        fitness = (cumulativeDistanceFromGoal/K);
         
+        fitness = (cumulativeDistanceFromGoal/K);
+        */
+
+        //AVERAGE DISTANVE BETWEEN BINS
         double cumulativeDistance =0;
         for(int i =0;i<K;i++){
             for(int j=i;j<K;j++){
                 cumulativeDistance += Math.abs(binWeights[i] - binWeights[j]);
             }
         }
-        //AVERAGE DISTANVE BETWEEN BINS
-        //fitness = (cumulativeDistance)/(0.5*K*(K-1));
+        
+        fitness = (cumulativeDistance)/(0.5*K*(K-1));
         
         fitness = fitness == 0 ? 1 : fitness;
         

@@ -26,17 +26,16 @@ public class StatsLogger {
      */
 
     public static void logFitness(Population pop, OutputStreamWriter out) {
-
-        ArrayList<Individual> sortedIndividuals = pop.getSortedIndividuals();
-        double bestFitness = sortedIndividuals.get(0).getFitnessValue();
-
+        double bestFitness = Double.MIN_VALUE;
         double fitnessSum = 0;
-        for (Individual ch : sortedIndividuals) {
-            fitnessSum += ch.getFitnessValue();
+        for(Individual ind : pop){
+            double fitness = ind.getFitnessValue();
+            fitnessSum += fitness;
+            if(fitness > bestFitness){
+                bestFitness = fitness;
+            }
         }
-
         double averageFitness = fitnessSum / pop.getPopulationSize();
-
         try {
             out.write("" + bestFitness + " " + averageFitness + System.getProperty("line.separator"));
         } catch (IOException e) {
@@ -55,19 +54,18 @@ public class StatsLogger {
      */
 
     public static void logObjective(Population pop, OutputStreamWriter out) {
-
-        ArrayList<Individual> sortedIndividuals = pop.getSortedIndividuals();
-        double bestFitness = sortedIndividuals.get(0).getObjectiveValue();
-
-        double fitnessSum = 0;
-        for (Individual ch : sortedIndividuals) {
-            fitnessSum += ch.getObjectiveValue();
+        double bestObjective = Double.MIN_VALUE;
+        double objectiveSum = 0;
+        for(Individual ind : pop){
+            double fitness = ind.getObjectiveValue();
+            objectiveSum += fitness;
+            if(fitness > bestObjective){
+                bestObjective = fitness;
+            }
         }
-
-        double averageFitness = fitnessSum / pop.getPopulationSize();
-
+        double averageFitness = objectiveSum / pop.getPopulationSize();
         try {
-            out.write("" + bestFitness + " " + averageFitness + System.getProperty("line.separator"));
+            out.write("" + bestObjective + " " + averageFitness + System.getProperty("line.separator"));
         } catch (IOException e) {
             e.printStackTrace();
         }

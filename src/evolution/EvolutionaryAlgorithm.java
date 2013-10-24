@@ -138,7 +138,9 @@ public class EvolutionaryAlgorithm {
 
         generationNo++;
 
-        fitness.evaluate(pop);
+        if(!pop.isFitnessEvaluated()){
+            fitness.evaluate(pop);
+        }
 
         if (generationNo == 1) {
             DetailsLogger.logInitialPopulation(pop);
@@ -157,7 +159,7 @@ public class EvolutionaryAlgorithm {
             for (int i = 0; i < matingSelectors.size(); i++) {
                 Population sel = new Population();
                 matingSelectors.get(i).select(toSelect, parents, sel);
-                matingPool.addAll((Population) sel.clone());
+                matingPool.addAll(sel);
                 for (int j = matingPool.getPopulationSize() - toSelect; j < matingPool.getPopulationSize(); j++) {
                     matingPool.get(j).setLogNotes(matingSelectors.get(i).getClass().getCanonicalName());
                 }
@@ -167,7 +169,7 @@ public class EvolutionaryAlgorithm {
             if (missing > 0) {
                 Population sel = new Population();
                 matingSelectors.get(matingSelectors.size() - 1).select(toSelect, parents, sel);
-                matingPool.addAll((Population) sel.clone());
+                matingPool.addAll(sel);
                 for (int i = matingPool.getPopulationSize() - missing; i < matingPool.getPopulationSize(); i++) {
                     matingPool.get(i).setLogNotes(matingSelectors.get(matingSelectors.size() - 1).getClass().getCanonicalName());
                 }
@@ -217,14 +219,14 @@ public class EvolutionaryAlgorithm {
         for (int i = 0; i < environmentalSelectors.size(); i++) {
             Population sel = new Population();
             environmentalSelectors.get(i).select(toSelect, combined, sel);
-            selected.addAll((Population) sel.clone());
+            selected.addAll(sel);
         }
 
         int missing = parents.getPopulationSize() - selected.getPopulationSize();
         if (missing > 0) {
             Population sel = new Population();
             environmentalSelectors.get(environmentalSelectors.size() - 1).select(toSelect, combined, sel);
-            selected.addAll((Population) sel.clone());
+            selected.addAll(sel);
         }
 
         DetailsLogger.logSelectedPart(combined);

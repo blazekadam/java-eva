@@ -85,4 +85,7 @@ public abstract class Individual implements Cloneable {
         return null;
     }
 
+    public boolean isFitnessEvaluated(){
+        return fitnessValue != -Double.MAX_VALUE;
+    }
 }

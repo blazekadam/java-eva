@@ -13,7 +13,6 @@ import java.util.Iterator;
  * @author Martin Pilat
  */
 public class Population implements Cloneable,Iterable<Individual>{
-
     int size = 0;
     Individual sampleIndividual;
     ArrayList<Individual> individuals;
@@ -26,6 +25,19 @@ public class Population implements Cloneable,Iterable<Individual>{
         individuals = new ArrayList<Individual>();
     }
 
+    /**
+     * @return true if the first Individual in population has the fitness function evaluated. 
+     */
+    public boolean isFitnessEvaluated(){
+        if(individuals.isEmpty()){
+            return true;
+        }
+        else{
+            return individuals.get(0).isFitnessEvaluated();
+        }
+    }
+    
+    
     /**
      * Makes a deep copy of the population.
      *
@@ -144,6 +156,23 @@ public class Population implements Cloneable,Iterable<Individual>{
         individuals.clear();
     }
 
+    
+    public Individual getBestIndividual(){
+        if(individuals.isEmpty()){
+            return null;
+        }
+        else{
+            Individual best = individuals.get(0);
+            double bestFitness = best.getFitnessValue();
+            for(Individual ind : this){
+                if(ind.getFitnessValue() > bestFitness){
+                    best = ind;
+                }
+            }
+            return best;
+        }
+    }
+    
     /**
      * Returns all the individuals in the population as a list sorted in descending
      * order og their fitness.

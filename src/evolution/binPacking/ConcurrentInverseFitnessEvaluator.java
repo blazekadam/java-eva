@@ -9,15 +9,18 @@ package evolution.binPacking;
 import evolution.FitnessEvaluator;
 import evolution.FitnessFunction;
 import evolution.Population;
+import evolution.concurrent.ConcurrentWorker;
 
 /**
  *
  * @author Adam
  */
-public class InverseFitnessEvaluator implements FitnessEvaluator{
+public class ConcurrentInverseFitnessEvaluator implements FitnessEvaluator{
     FitnessFunction fitness;
-
-    public InverseFitnessEvaluator(FitnessFunction fitness) {
+    
+    private static final int THREAD_COUNT = Runtime.getRuntime().availableProcessors();
+;
+    public ConcurrentInverseFitnessEvaluator(FitnessFunction fitness) {
         this.fitness = fitness;
     }
     
@@ -25,10 +28,6 @@ public class InverseFitnessEvaluator implements FitnessEvaluator{
     
     @Override
     public void evaluate(Population pop) {
-        double[] fitnesses = new double[pop.getPopulationSize()];
-        for(int i=0;i<fitnesses.length;i++){
-            double f = fitness.evaluate(pop.get(i));
-            pop.get(i).setFitnessValue(1/f);
-        }
+        ConcurrentWorker.performConcurrently(pop, ind->ind.setFitnessValue(1/fitness.evaluate(ind)));
     }
 }

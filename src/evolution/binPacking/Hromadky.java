@@ -6,7 +6,7 @@ import evolution.Population;
 import evolution.StatsLogger;
 import evolution.individuals.Individual;
 import evolution.individuals.IntegerIndividual;
-import evolution.operators.IntegerMutation;
+import evolution.operators.ConcurrentIntegerMutation;
 import evolution.operators.OnePtXOver;
 import evolution.operators.SwappingMutationOperator;
 import evolution.selectors.BigTournamentSelector;
@@ -120,7 +120,7 @@ public class Hromadky {
     static void run(int number) {
 
         try {
-
+            System.out.println("================================================");
             DetailsLogger.startNewLog(detailsLogPrefix + "." + number + ".xml");
             DetailsLogger.logParams(prop);
 
@@ -133,12 +133,12 @@ public class Hromadky {
 
             EvolutionaryAlgorithm ea = new EvolutionaryAlgorithm();
             HromadkyFitness fitness = new HromadkyFitness(weights, K);
-            ea.setFitnessEvaluator(new InverseFitnessEvaluator(fitness));
+            ea.setFitnessEvaluator(new ConcurrentInverseFitnessEvaluator(fitness));
             ea.addMatingSelector(new SUSSelector());
             //ea.addMatingSelector(new TournamentSelector());
             ea.addMatingSelector(new BigTournamentSelector());
             ea.addOperator(new OnePtXOver(xoverProb));
-            ea.addOperator(new IntegerMutation(mutProb, mutProbPerBit));
+            ea.addOperator(new ConcurrentIntegerMutation(mutProb, mutProbPerBit));
             //ea.addOperator(new SwappingMutationOperator(0.1, 0.01));
             ea.addEnvironmentalSelector(new SUSSelector());
             //ea.addEnvironmentalSelector(new TournamentSelector());
@@ -150,23 +150,29 @@ public class Hromadky {
             OutputStreamWriter progOut = new OutputStreamWriter(new FileOutputStream(objectiveFilePrefix + "." + number));
 
             int lastObj = Integer.MAX_VALUE;
+            long start = System.nanoTime();
             for (int i = 1; i <= maxGen; i++) {
                 ea.evolve(pop);
-                IntegerIndividual bestInd = (IntegerIndividual) pop.getSortedIndividuals().get(0);
+                IntegerIndividual bestInd = (IntegerIndividual)pop.getBestIndividual();
                 double diff = bestInd.getObjectiveValue();
-                if(i == maxGen -1 || i % 1000 == 0 || diff != lastObj){
+                if(i == maxGen || i % 1000 == 0 || diff != lastObj){
+                    if(i%1000 == 0){
+                        long now = System.nanoTime();
+                        double timeDiffSec = (now - start) / 1000000000;
+                        System.out.println("SPEED: "+Math.round(i/timeDiffSec)+" gen/s");
+                    }
                     lastObj = (int)diff;
                     System.out.println(number + "|" + i + ": " + diff + " " + Arrays.toString(fitness.getBinWeights(bestInd)));
                     best[number] = diff;
                 }
-                //StatsLogger.logFitness(pop, out);
-                //StatsLogger.logObjective(pop, progOut);
+                StatsLogger.logFitness(pop, out);
+                StatsLogger.logObjective(pop, progOut);
 
             }
 
             OutputStreamWriter bestOut = new OutputStreamWriter(new FileOutputStream(bestPrefix + "." + number));
 
-            IntegerIndividual bestInd = (IntegerIndividual) pop.getSortedIndividuals().get(0);
+            IntegerIndividual bestInd = (IntegerIndividual)pop.getBestIndividual();
 
             for (int i = 0; i < bestInd.toIntArray().length; i++) {
                 bestOut.write(weights.get(i) + " " + bestInd.toIntArray()[i] + System.getProperty("line.separator"));

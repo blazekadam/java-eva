@@ -17,7 +17,9 @@ public class SGAReplacement implements Replacement {
      * @return A clone of the offspring population.
      */
     public Population replace(Population parents, Population offspring) {
-        return (Population) offspring.clone();
+        //ORIGINAL
+        //return (Population) offspring.clone();
+        return offspring;
     }
 
 }
