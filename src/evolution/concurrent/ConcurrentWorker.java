@@ -7,9 +7,6 @@
 package evolution.concurrent;
 
 import evolution.Population;
-import evolution.binPacking.ConcurrentInverseFitnessEvaluator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -18,9 +15,9 @@ import java.util.logging.Logger;
 public class ConcurrentWorker {
     private static final int THREAD_COUNT = Runtime.getRuntime().availableProcessors();
     
-    public static void performConcurrently(Population pop,IndividualOperation op){
+    public static void performConcurrently(final Population pop,final IndividualOperation op){
         Thread[] threads = new Thread[THREAD_COUNT];
-        int popSize = pop.getPopulationSize();
+        final int popSize = pop.getPopulationSize();
         for(int tid = 0;tid<THREAD_COUNT;tid++){
             final int tidF = tid;
             threads[tid] = new Thread(){

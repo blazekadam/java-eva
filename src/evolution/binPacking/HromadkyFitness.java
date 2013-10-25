@@ -12,7 +12,7 @@ public class HromadkyFitness implements FitnessFunction {
 
     final double[] weights;
     final int K;
-    final double goal;
+    double goal;
 
     public HromadkyFitness(Vector<Double> weights, int K) {
         this.weights = new double[weights.size()];
@@ -20,7 +20,11 @@ public class HromadkyFitness implements FitnessFunction {
             this.weights[i] = weights.get(i);
         }
         this.K = K;
-        goal = weights.stream().reduce(0.0, (o,n)->o+n)/K;
+        goal = 0;
+        for(double w : weights){
+            goal +=w;
+        }
+        goal /= K;
     }
 
     public int[] getBinWeights(Individual ind) {
@@ -62,12 +66,12 @@ public class HromadkyFitness implements FitnessFunction {
         for(int i = 0; i<K;i++){
             cumulativeDistanceFromGoal += Math.abs(binWeights[i] - goal);
         }
-        double avgDist = cumulativeDistanceFromGoal / (0.5*K*(K-1));
         
         fitness = (cumulativeDistanceFromGoal/K);
         */
 
         //AVERAGE DISTANVE BETWEEN BINS
+        
         double cumulativeDistance =0;
         for(int i =0;i<K;i++){
             for(int j=i;j<K;j++){

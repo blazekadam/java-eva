@@ -10,6 +10,8 @@ import evolution.FitnessEvaluator;
 import evolution.FitnessFunction;
 import evolution.Population;
 import evolution.concurrent.ConcurrentWorker;
+import evolution.concurrent.IndividualOperation;
+import evolution.individuals.Individual;
 
 /**
  *
@@ -28,6 +30,12 @@ public class ConcurrentInverseFitnessEvaluator implements FitnessEvaluator{
     
     @Override
     public void evaluate(Population pop) {
-        ConcurrentWorker.performConcurrently(pop, ind->ind.setFitnessValue(1/fitness.evaluate(ind)));
+        ConcurrentWorker.performConcurrently(pop, new IndividualOperation() {
+
+            @Override
+            public void operate(Individual ind) {
+                ind.setFitnessValue(1/fitness.evaluate(ind));
+            }
+        });
     }
 }

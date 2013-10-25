@@ -45,12 +45,16 @@ public class SUSSelector implements Selector {
                 sum = 0;
             }
             for (; index <= fitnesses.length; index++) {
-                if (sum > ball || index == fitnesses.length - 1) {
+                sum += fitnesses[index];
+                if (sum > ball) {
                     to.add((Individual) from.get(index).clone());
                     from.get(index).setLogNotes(from.get(index).getLogNotes() + " " + this.getClass().getCanonicalName());
                     break;
                 }
-                sum += fitnesses[index];
+                if(index == fitnesses.length - 1){
+                    index = 0;
+                    sum = 0;
+                }
             }
         }
     }

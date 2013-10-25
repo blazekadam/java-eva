@@ -198,7 +198,9 @@ public class EvolutionaryAlgorithm {
             matingPool = offspring;
         }
 
-        fitness.evaluate(offspring);
+        if(!DetailsLogger.disableLog){
+            fitness.evaluate(offspring);
+        }
 
         Population selected = new Population();
 
