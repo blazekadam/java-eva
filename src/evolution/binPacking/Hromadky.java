@@ -6,7 +6,7 @@ import evolution.Population;
 import evolution.StatsLogger;
 import evolution.individuals.Individual;
 import evolution.individuals.IntegerIndividual;
-import evolution.operators.ConcurrentIntegerMutation;
+import evolution.operators.IntegerMutation;
 import evolution.operators.OnePtXOver;
 import evolution.operators.SwappingMutationOperator;
 import evolution.selectors.BigTournamentSelector;
@@ -138,7 +138,7 @@ public class Hromadky {
             //ea.addMatingSelector(new TournamentSelector());
             ea.addMatingSelector(new BigTournamentSelector());
             ea.addOperator(new OnePtXOver(xoverProb));
-            ea.addOperator(new ConcurrentIntegerMutation(mutProb, mutProbPerBit));
+            ea.addOperator(new IntegerMutation(mutProb, mutProbPerBit));
             //ea.addOperator(new SwappingMutationOperator(0.1, 0.01));
             ea.addEnvironmentalSelector(new SUSSelector());
             //ea.addEnvironmentalSelector(new TournamentSelector());
@@ -149,7 +149,7 @@ public class Hromadky {
             OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(fitnessFilePrefix + "." + number));
             OutputStreamWriter progOut = new OutputStreamWriter(new FileOutputStream(objectiveFilePrefix + "." + number));
 
-            int lastObj = Integer.MAX_VALUE;
+            double lastObj = Double.MAX_VALUE;
             long start = System.nanoTime();
             for (int i = 1; i <= maxGen; i++) {
                 ea.evolve(pop);
@@ -161,7 +161,7 @@ public class Hromadky {
                         double timeDiffSec = (now - start) / 1000000000;
                         System.out.println("SPEED: "+Math.round(i/timeDiffSec)+" gen/s");
                     }
-                    lastObj = (int)diff;
+                    lastObj = diff;
                     System.out.println(number + "|" + i + ": " + diff + " " + Arrays.toString(fitness.getBinWeights(bestInd)));
                     best[number] = diff;
                 }

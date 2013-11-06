@@ -40,12 +40,13 @@ public class IntegerIndividual extends ArrayIndividual {
         return max;
     }
 
+    @Override
     public String toString() {
         return Arrays.toString(genes);
     }
 
     /**
-     * Returns the internall array.
+     * Returns the internal array.
      *
      * @return The internal integer array.
      */
@@ -76,7 +77,7 @@ public class IntegerIndividual extends ArrayIndividual {
     }
 
     @Override
-    public Object clone() {
+    public Object clone(){
 
         IntegerIndividual newBI = (IntegerIndividual) super.clone();
         newBI.genes = new int[genes.length];
