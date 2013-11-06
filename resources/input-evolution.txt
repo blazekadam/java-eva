@@ -1,0 +1,3 @@
+AlwaysCooperate
+AlwaysDeceive
+TitForTat

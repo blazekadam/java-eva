@@ -7,13 +7,17 @@ import java.io.File;
 
 public class PrisonerDilemma {
 
+    public static boolean details = false;
+    public static int roundsMin = 500;
+    public static int roundsMax = 800;
+    
     /**
      * @param args
      */
     public static void main(String[] args) {
 
         //change this to wherever your .class files are
-        File dir = new File("out/production/evaTeaching/evolution/prisoner/strategies/");
+        File dir = new File("build/classes/evolution/prisoner/strategies");
 
         String[] stratNames = dir.list();
 
@@ -51,7 +55,7 @@ public class PrisonerDilemma {
                     Strategy s1 = strategies[i];
                     Strategy s2 = strategies[j];
 
-                    System.err.print(s1.getName() + " vs. " + s2.getName() + ": ");
+                    System.out.print(s1.getName() + " vs. " + s2.getName() + ": ");
 
                     int sc1 = 0;
                     int sc2 = 0;
@@ -59,7 +63,7 @@ public class PrisonerDilemma {
                     String str1 = "";
                     String str2 = "";
 
-                    int stop = RandomNumberGenerator.getInstance().nextInt(101) + 200;
+                    int stop = RandomNumberGenerator.getInstance().nextInt(roundsMax - roundsMin) + roundsMin;
                     for (int m = 0; m < stop; m++) {
 
                         Move s1Move = s1.nextMove();
@@ -79,10 +83,11 @@ public class PrisonerDilemma {
 
                     }
 
-                    System.err.println(sc1 + ":" + sc2);
-                    System.err.println("\t" + str1);
-                    System.err.println("\t" + str2);
-
+                    System.out.println(sc1 + ":" + sc2);
+                    if(details){
+                        System.out.println("\t" + str1);
+                        System.out.println("\t" + str2);
+                    }
                     scores[i] += sc1;
                     scores[j] += sc2;
 
