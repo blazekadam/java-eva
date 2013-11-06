@@ -13,7 +13,7 @@ import evolution.RandomNumberGenerator;
  *
  * @author Adam
  */
-public class BalancedRandom extends Balanced{
+public class OptimisticPessimist extends Balanced{
     RandomNumberGenerator rng = RandomNumberGenerator.getInstance();
     
     @Override
@@ -52,6 +52,6 @@ public class BalancedRandom extends Balanced{
     
     @Override
     public String getName(){
-        return "BalancedRandom";
+        return "Optimistic pessimist";
     }
 }

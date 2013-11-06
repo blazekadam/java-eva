@@ -8,8 +8,8 @@ import java.io.File;
 public class PrisonerDilemma {
 
     public static boolean details = false;
-    public static int roundsMin = 500;
-    public static int roundsMax = 800;
+    public static int roundsMin = 5000;
+    public static int roundsMax = 5001;
     
     /**
      * @param args

@@ -16,13 +16,15 @@ import java.util.List;
  *
  * @author Adam
  */
-public class AdaptiveBitch extends Strategy{
-    protected Strategy[] strategies = new Strategy[]{new BalancedRandom(),new TitForTat(),new AlwaysDeceive()};
+public class AdaptivePedophileSexOffender extends Strategy{
+    protected Strategy[] strategies = new Strategy[]{new OptimisticPessimist(),new TitForTat(),new AlwaysDeceive()};
     protected RandomNumberGenerator rng = RandomNumberGenerator.getInstance();
     protected Move[] moves;
     protected double[] avg;
     protected int[] credits;
     protected int[] creditsBase;
+    protected int creditGood;
+    protected int creditBad;
     protected int rounds;
     
     {
@@ -59,6 +61,8 @@ public class AdaptiveBitch extends Strategy{
         rounds++;
         
         if(zeroCredits){
+            creditBad = creditBad /2 + creditBad %2;
+            creditGood *= 2;
             int maxIndex = 0;
             double maxAvg = 0;
             for(int i = 0;i<strategies.length;i++){
@@ -69,10 +73,10 @@ public class AdaptiveBitch extends Strategy{
             }
             for(int i =0;i<strategies.length;i++){
                 if(i == maxIndex){
-                    creditsBase[i] = creditsBase[i] *2;
+                    creditsBase[i] = creditGood;
                 }
                 else{
-                    creditsBase[i] = creditsBase[i] / 2 + creditsBase[i] % 2;
+                    creditsBase[i] = creditBad;
                 }
                 credits[i] = creditsBase[i];
             }
@@ -81,7 +85,7 @@ public class AdaptiveBitch extends Strategy{
 
     @Override
     public String getName() {
-        return "Adaptive bitch";
+        return "Adaptive pedophile sex offender";
     }
 
     @Override
@@ -95,6 +99,8 @@ public class AdaptiveBitch extends Strategy{
         avg = new double[strategies.length];
         credits = new int[strategies.length];
         creditsBase = new int[strategies.length];
+        creditGood = 16;
+        creditBad = 16;
         for(int i=0;i<credits.length;i++){
             credits[i] = 16;
             creditsBase[i] = 16;
